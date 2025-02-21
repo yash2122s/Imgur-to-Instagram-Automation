@@ -1,0 +1,28 @@
+name: Post Imgur Image to Instagram
+
+on:
+  schedule:
+    - cron: "0 12 * * *"  # Runs every day at 12:00 UTC
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  post_to_instagram:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run script to send Imgur URL
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          python imgur_to_instagram.py
